@@ -5,6 +5,7 @@ class AddTodo extends React.Component {
     constructor(props){
         super(props);
         this.state = {item : {title : "" }} ; //사용자의 입력을 저장할 오브젝트
+        this.add = props.add; // props의 함수를 this.add에 연결
     }
     //1 함수작성
     // 사용자가 키를 하나 입력할때마다 작동함, 문자열을 자바스크립트 오브젝트에 저장함
@@ -18,7 +19,7 @@ class AddTodo extends React.Component {
 
     // Add 함수 작성
     onButtonClick = () =>{
-        this.add(this.state.item); //add 함수 사용
+        this.state.item.title != '' && this.add(this.state.item); //add 함수 사용
         this.setState({item : {title : ""}});
     }
 
