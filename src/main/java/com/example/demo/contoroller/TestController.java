@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class TestController {
 		//int는 null을 받아올 수 없기 때문에 required = false을 사용해도 의미 없다. String만 가능함 혹은 INTEGER로 받아오는 후처리 필요
 	}
 
+	//조회를 제외하고는 @ResponseStatus 값을 주어야 함
 	@GetMapping("/testResponseBody")
 	public ResponseDTO testControllerResponseBody(){
 		List<String> list =  new ArrayList<>();
