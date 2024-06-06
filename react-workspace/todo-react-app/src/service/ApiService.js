@@ -9,7 +9,7 @@ export function call(api, method, request){
     //로컬 스토리지에서 ACCESS_TOKEN 가져오기
     const accessToken = localStorage.getItem("ACCESS_TOKEN");
     if(accessToken && accessToken !== null){
-        headers.append("Authorization", "Bearer" + accessToken);
+        headers.append("Authorization", "Bearer " + accessToken);
     }
     
     let options = {
