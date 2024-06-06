@@ -16,7 +16,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public UserEntity create(final UserEntity userEntity) {
+	public UserEntity create(UserEntity userEntity) {
 		if(userEntity == null || userEntity.getEmail() == null) {
 			throw new RuntimeException("Invalid argument");
 		}
@@ -28,8 +28,8 @@ public class UserService {
 		return userRepository.save(userEntity);
 	}
 
-	public UserEntity getByCredentials(final String email, final String password, final PasswordEncoder encoder) {
-		
+	public UserEntity getByCredentials(String email, String password, PasswordEncoder encoder) {
+
 		final UserEntity originalUser = userRepository.findByEmail(email);
 		
 		if(originalUser != null && encoder.matches(password, originalUser.getPassword())) {

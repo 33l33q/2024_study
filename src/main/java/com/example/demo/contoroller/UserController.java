@@ -36,7 +36,7 @@ public class UserController {
 			//요청을 이용해 저장할 사용자 만들기 
 			UserEntity user = UserEntity.builder().email(userDTO.getEmail())
 								.username(userDTO.getUsername())
-								.password(userDTO.getPassword())
+								.password(passwordEncoder.encode(userDTO.getPassword()))
 								.build();
 			//서비스를 이용해 리포지터리에 사용자 저장
 			UserEntity registerUser = userService.create(user);
@@ -61,11 +61,14 @@ public class UserController {
 			//토큰 생성
 			final String token = tokenProvider.create(user);
 			
+			log.info("!!!!!!!!!!!!!!!!!!!! 로그인 시 토큰  " + token);
+			
 			final UserDTO responseUserDTO = UserDTO.builder()
 											.email(user.getEmail())
 											.id(user.getId())
 											.token(token)
 											.build();
+			
 			return ResponseEntity.ok().body(responseUserDTO);
 		}else {
 			ResponseDTO responseDTO = ResponseDTO.builder().error("Login failed").build();
