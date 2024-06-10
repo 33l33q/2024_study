@@ -2,9 +2,10 @@ import logo from './logo.svg';
 import React, { Component } from 'react';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
-import { Paper, List, Container, responsiveFontSizes } from '@material-ui/core';
+import { Paper, List, Container, responsiveFontSizes, 
+         Grid, Button, AppBar, Toolbar, Typography } from '@material-ui/core';
 import './App.css';
-import {call} from "./service/ApiService"
+import {call, signout} from "./service/ApiService"
 
 
 class App extends React.Component {
@@ -17,12 +18,20 @@ class App extends React.Component {
 
   constructor(props){
     super(props);
-   this.state= { items : []
+    this.state= { items : [] ,
+                  loading :  true, /*로딩중임을 표현할 변수 추가 */
+
        /* items : [ {}
        { id : 0, title : "Hello World 1", done : true} ,
         { id : 1, title : "Hello World 2", done : false} 
       ], */
     };
+  }
+
+  componentDidMount(){
+    call("/todo", "GET", null).then((response) => 
+    this.setState({item:response.data, loading:false})
+  );
   }
 
   //1 함수추가
@@ -66,7 +75,6 @@ class App extends React.Component {
   }
 
   render(){
-
     var todoItems = this.state.items.length > 0 && (
       <Paper style={{ margin:16}}>
         <List>
@@ -78,15 +86,55 @@ class App extends React.Component {
       </Paper>
     );
   
-    // 2 함수연결
+    //navigationBar추가
+    var navigationBar = (
+      <AppBar position="static">
+        <Toolbar>
+          <Grid justify='space-between' container>
+            <Grid item>
+              <Typography variant='h6'>오늘의 할일</Typography>
+            </Grid>
+            <Grid>
+              <Button color='inherit' onClick={signout}>
+                로그아웃
+              </Button>
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+    )
+
+    /* 로딩 중이 아닐 때 렌더링 할 부분 */
+    var todoListPage = (
+      <div>
+        {navigationBar}{/*네비게이션바 렌더링*/}
+        <contaner maxWidth="md">
+          <AddTodo add={this.add}/>
+          <div className='TodoList'>{todoItems}</div>
+        </contaner>
+      </div>
+    )
+    /*로딩 중일떄 렌더링 할 부분 */
+    var loadingPage = <h1> 로딩중.. </h1>
+    var content = loadingPage;
+    if(!this.state.loading){
+      /*로딩중이 아니면! todoListPage를 선택*/
+      content = todoListPage;
+    }
+
+    /* 선택한 Content 렌더링 */
+
+    return <div className='App'>{content}</div>
+    /*2 함수연결
     return(
       <div className="App">
+        {navigationBar} 
         <Container maxWidth="md">
           <AddTodo add = {this.add}></AddTodo>
           <div className="TodoList">{todoItems}</div>
         </Container>
        </div>
-    );
+    ); */
   }
 }
 
